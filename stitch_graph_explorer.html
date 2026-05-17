@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NodeShift AI - Graph Explorer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "surface-variant": "#353439",
+                            "primary-container": "#7c3aed",
+                            "surface-container": "#1f1f23",
+                            "surface-container-low": "#1b1b1f",
+                            "outline": "#958da1",
+                            "on-secondary-fixed": "#181445",
+                            "surface-container-lowest": "#0e0e12",
+                            "on-background": "#e5e1e7",
+                            "primary-fixed": "#eaddff",
+                            "on-primary-fixed-variant": "#5a00c6",
+                            "on-primary-fixed": "#25005a",
+                            "secondary-fixed": "#e3dfff",
+                            "surface-dim": "#131317",
+                            "inverse-primary": "#732ee4",
+                            "outline-variant": "#4a4455",
+                            "primary-fixed-dim": "#d2bbff",
+                            "inverse-on-surface": "#303034",
+                            "secondary-fixed-dim": "#c4c1fb",
+                            "on-tertiary-fixed-variant": "#6900b3",
+                            "tertiary-container": "#8d36db",
+                            "error-container": "#93000a",
+                            "on-tertiary-fixed": "#2c0051",
+                            "on-secondary-container": "#b3afe9",
+                            "secondary": "#c4c1fb",
+                            "on-surface-variant": "#ccc3d8",
+                            "on-secondary": "#2d2a5b",
+                            "on-tertiary-container": "#f2dfff",
+                            "surface-container-high": "#2a292e",
+                            "on-tertiary": "#490080",
+                            "on-primary": "#3f008e",
+                            "tertiary": "#ddb7ff",
+                            "on-error": "#690005",
+                            "inverse-surface": "#e5e1e7",
+                            "on-secondary-fixed-variant": "#444173",
+                            "on-surface": "#e5e1e7",
+                            "surface-tint": "#d2bbff",
+                            "surface-container-highest": "#353439",
+                            "tertiary-fixed": "#f0dbff",
+                            "error": "#ffb4ab",
+                            "surface": "#131317",
+                            "surface-bright": "#39393d",
+                            "primary": "#d2bbff",
+                            "on-error-container": "#ffdad6",
+                            "secondary-container": "#444173",
+                            "on-primary-container": "#ede0ff",
+                            "tertiary-fixed-dim": "#ddb7ff",
+                            "background": "#131317"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "unit": "4px",
+                            "margin-desktop": "40px",
+                            "margin-mobile": "16px",
+                            "gutter": "24px",
+                            "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                            "headline-xl": ["Space Grotesk"],
+                            "body-md": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "headline-md": ["Space Grotesk"],
+                            "headline-lg": ["Space Grotesk"],
+                            "code-md": ["JetBrains Mono"],
+                            "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                            "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                            "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "code-md": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(124, 58, 237, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(167, 139, 250, 0.15);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        .graph-bg {
+            background-image: radial-gradient(rgba(139, 92, 246, 0.2) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-16 bg-opacity-80 backdrop-blur-xl bg-surface-container-low dark:bg-surface-container-low shadow-[0_0_30px_rgba(139,92,246,0.1)] border-b border-outline-variant/15">
+<div class="flex items-center gap-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary tracking-tight">NodeShift AI</h1>
+<div class="hidden md:flex gap-6">
+<a class="font-label-sm text-label-sm text-primary border-b-2 border-primary pb-1 Active: scale-95 transition-transform" href="#">Graph</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors hover:bg-primary/10 transition-all duration-300 px-2 py-1 rounded" href="#">Dashboard</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors hover:bg-primary/10 transition-all duration-300 px-2 py-1 rounded" href="#">Hotspots</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors hover:bg-primary/10 transition-all duration-300 px-2 py-1 rounded" href="#">Debt Clusters</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container/80 text-on-primary-container px-4 py-2 rounded-lg font-label-sm text-label-sm border border-primary/30 hover:shadow-[0_0_15px_rgba(139,92,246,0.4)] transition-all">Load New Repo</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Main Layout -->
+<main class="flex h-screen pt-16 pb-8">
+<!-- Left SideNavBar (Repo Explorer) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col w-64 bg-opacity-80 backdrop-blur-xl bg-surface-container-lowest dark:bg-surface-container-lowest border-r border-outline-variant/15 shadow-2xl p-4 overflow-y-auto">
+<div class="mb-6 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high border border-outline-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">folder_zip</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">Repo Explorer</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">main-branch</p>
+</div>
+</div>
+<div class="space-y-2 mb-8">
+<button class="w-full flex items-center gap-3 px-3 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-sm text-label-sm Ease-Out-Expo transition-all duration-300">
+<span class="material-symbols-outlined">search</span>
+                    Search
+                </button>
+<button class="w-full flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/20 rounded-lg font-label-sm text-label-sm Ease-Out-Expo transition-all duration-300">
+<span class="material-symbols-outlined">filter_list</span>
+                    Filter
+                </button>
+<button class="w-full flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/20 rounded-lg font-label-sm text-label-sm Ease-Out-Expo transition-all duration-300">
+<span class="material-symbols-outlined">account_tree</span>
+                    Node Type
+                </button>
+<button class="w-full flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/20 rounded-lg font-label-sm text-label-sm Ease-Out-Expo transition-all duration-300">
+<span class="material-symbols-outlined">warning</span>
+                    Risk Level
+                </button>
+<button class="w-full flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/20 rounded-lg font-label-sm text-label-sm Ease-Out-Expo transition-all duration-300">
+<span class="material-symbols-outlined">layers</span>
+                    Layout
+                </button>
+</div>
+<!-- Filters Content -->
+<div class="mt-4 space-y-6">
+<div>
+<h3 class="font-label-sm text-label-sm text-on-surface-variant mb-2">Search Nodes</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2 text-outline text-sm">search</span>
+<input class="w-full bg-[rgba(5,5,8,0.6)] border border-outline-variant/30 rounded-lg py-2 pl-9 pr-3 text-sm focus:border-primary focus:shadow-[0_0_10px_rgba(139,92,246,0.3)] outline-none text-on-surface transition-all" placeholder="Class, function, file..." type="text"/>
+</div>
+</div>
+<div>
+<h3 class="font-label-sm text-label-sm text-on-surface-variant mb-2">Node Types</h3>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 rounded-full bg-blue-900/30 border border-blue-500/50 text-blue-300 font-label-sm text-label-sm text-xs cursor-pointer">File</span>
+<span class="px-2 py-1 rounded-full bg-purple-900/30 border border-purple-500/50 text-purple-300 font-label-sm text-label-sm text-xs cursor-pointer">Class</span>
+<span class="px-2 py-1 rounded-full bg-pink-900/30 border border-pink-500/50 text-pink-300 font-label-sm text-label-sm text-xs cursor-pointer">Function</span>
+<span class="px-2 py-1 rounded-full bg-orange-900/30 border border-orange-500/50 text-orange-300 font-label-sm text-label-sm text-xs cursor-pointer">Module</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4">
+<button class="w-full bg-primary-container/80 hover:bg-primary-container text-on-primary-container py-2 rounded-lg font-label-sm text-label-sm border border-primary/30 transition-all">Analyze Code</button>
+</div>
+</aside>
+<!-- Center Canvas -->
+<section class="ml-64 mr-80 flex-1 relative bg-[#050508] graph-bg overflow-hidden flex items-center justify-center">
+<!-- Dummy Graph Elements -->
+<div class="relative w-full h-full">
+<!-- Lines -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 1;">
+<line stroke="rgba(167, 139, 250, 0.4)" stroke-width="2" x1="30%" x2="50%" y1="40%" y2="50%"></line>
+<line stroke="rgba(167, 139, 250, 0.2)" stroke-width="1" x1="50%" x2="70%" y1="50%" y2="30%"></line>
+<line stroke="rgba(239, 68, 68, 0.5)" stroke-dasharray="4" stroke-width="2" x1="50%" x2="60%" y1="50%" y2="70%"></line>
+</svg>
+<!-- Nodes -->
+<!-- Core Node -->
+<div class="absolute top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="w-16 h-16 rounded-full glass-panel neon-glow flex items-center justify-center border-purple-400/50 cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-purple-300">data_object</span>
+</div>
+<span class="absolute -bottom-6 left-1/2 -translate-x-1/2 font-label-sm text-label-sm text-on-surface whitespace-nowrap bg-surface-container px-2 py-1 rounded border border-outline-variant/30">UserService.ts</span>
+</div>
+<!-- File Node -->
+<div class="absolute top-[40%] left-[30%] transform -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center border-blue-400/30 bg-blue-900/10 cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-blue-300 text-sm">description</span>
+</div>
+</div>
+<!-- Hotspot Node -->
+<div class="absolute top-[70%] left-[60%] transform -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="w-14 h-14 rounded-full glass-panel flex items-center justify-center border-red-500/50 bg-red-900/20 shadow-[0_0_15px_rgba(239,68,68,0.4)] cursor-pointer hover:scale-110 transition-transform relative">
+<span class="material-symbols-outlined text-orange-300">functions</span>
+<div class="absolute -top-2 -right-2 bg-surface text-xs rounded-full p-1 border border-red-500/50">🔥</div>
+</div>
+</div>
+</div>
+<!-- Floating Controls -->
+<div class="absolute bottom-6 right-6 z-20 flex flex-col gap-2 glass-panel p-2 rounded-lg">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">add</span></button>
+<div class="h-px bg-outline-variant/30 w-full"></div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">remove</span></button>
+<div class="h-px bg-outline-variant/30 w-full"></div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined">fit_screen</span></button>
+</div>
+<!-- Mini Legend -->
+<div class="absolute bottom-6 left-6 z-20 glass-panel p-3 rounded-lg font-label-sm text-label-sm text-xs flex gap-4">
+<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-blue-500/50 border border-blue-400"></div> File</div>
+<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-purple-500/50 border border-purple-400"></div> Class</div>
+<div class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-red-500/50 border border-red-400"></div> Hotspot</div>
+</div>
+</section>
+<!-- Right SideNavBar (IBM Bob AI) -->
+<aside class="fixed right-0 top-16 h-[calc(100vh-64px)] z-40 flex flex-col w-80 bg-opacity-80 backdrop-blur-xl bg-surface-container-low dark:bg-surface-container-low border-l border-outline-variant/15 shadow-[0_0_20px_rgba(139,92,246,0.2)] p-4 overflow-y-auto">
+<div class="mb-6 flex items-center gap-3 pb-4 border-b border-outline-variant/20">
+<div class="w-10 h-10 rounded-full bg-tertiary-container/20 border border-tertiary/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">smart_toy</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-tertiary">IBM Bob AI</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Intelligent Assistant</p>
+</div>
+</div>
+<!-- Selected Node Context -->
+<div class="mb-6 glass-panel p-4 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-purple-300 text-sm">data_object</span>
+<h3 class="font-label-sm text-label-sm text-on-surface">UserService.ts</h3>
+</div>
+<p class="text-xs text-on-surface-variant mb-3">Core authentication and user management service.</p>
+<div class="space-y-3">
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-outline">Risk Score</span>
+<span class="text-orange-400">High (78%)</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-orange-500 w-[78%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs mb-1">
+<span class="text-outline">Tech Debt</span>
+<span class="text-red-400">Critical</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-red-500 w-[90%]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Code Snippet -->
+<div class="mb-6 bg-[#050508] border border-outline-variant/20 rounded-lg p-3 font-code-md text-code-md text-xs overflow-x-auto">
+<pre><code class="text-on-surface-variant"><span class="text-pink-400">export class</span> <span class="text-purple-300">UserService</span> {
+  <span class="text-blue-300">private</span> db: Database;
+  
+  <span class="text-orange-300">async</span> <span class="text-blue-200">authenticate</span>(req) {
+    <span class="text-outline-variant">// TODO: Refactor this</span>
+    <span class="text-pink-400">if</span>(!req.user) <span class="text-pink-400">return</span> <span class="text-purple-300">false</span>;
+    ...
+  }
+}</code></pre>
+</div>
+<!-- AI Actions -->
+<div class="space-y-2 mt-auto">
+<button class="w-full flex items-center justify-between px-4 py-3 bg-surface-container-high text-tertiary font-bold rounded-lg font-label-sm text-label-sm border border-tertiary/20 hover:glow-purple Transition-all duration-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">psychology</span>
+                        Explain
+                    </div>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 bg-surface-container text-on-surface-variant hover:text-tertiary rounded-lg font-label-sm text-label-sm border border-transparent hover:border-outline-variant/30 hover:glow-purple Transition-all duration-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">analytics</span>
+                        Analyze
+                    </div>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 bg-surface-container text-on-surface-variant hover:text-tertiary rounded-lg font-label-sm text-label-sm border border-transparent hover:border-outline-variant/30 hover:glow-purple Transition-all duration-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">auto_fix_high</span>
+                        Modernize
+                    </div>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 bg-surface-container text-on-surface-variant hover:text-tertiary rounded-lg font-label-sm text-label-sm border border-transparent hover:border-outline-variant/30 hover:glow-purple Transition-all duration-300">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined">speed</span>
+                        Metrics
+                    </div>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full z-50 flex items-center justify-between px-4 h-8 bg-surface-dim dark:bg-surface-dim border-t border-outline-variant/10">
+<div class="font-code-md text-code-md text-primary">NodeShift AI Status: Connected</div>
+<div class="flex gap-6">
+<a class="font-code-md text-code-md text-outline hover:text-on-surface" href="#">System Logs</a>
+<a class="font-code-md text-code-md text-outline hover:text-on-surface" href="#">Latency: 24ms</a>
+<a class="font-code-md text-code-md text-outline hover:text-on-surface" href="#">v2.4.0-stable</a>
+</div>
+</footer>
+</body></html>
