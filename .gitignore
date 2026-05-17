@@ -70,5 +70,6 @@ parsed_repos/
 # Bob sessions (keep structure, ignore content for now)
 bob_sessions/*.md
 !bob_sessions/README.md
+!bob_sessions/Task_History_Export.md
 
 # Made with Bob
